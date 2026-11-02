@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ta"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Annur Call Auto - 8489247911</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial;background:#FFF8E1}.top{background:#FFC107;padding:20px;text-align:center;border-bottom:4px solid #000}.top h1{font-weight:900;font-size:28px}.top h2{background:#000;color:#FFC107;padding:8px 15px;border-radius:20px;display:inline-block;margin-top:10px}.box{margin:15px auto;max-width:500px;background:#fff;padding:20px;border-radius:16px;box-shadow:0 4px 12px #0002;border:2px solid #FFC107}.box h3{margin-bottom:12px}input,select{width:100%;padding:14px;margin:7px 0;border:2px solid #ddd;border-radius:10px;font-size:16px}label{font-weight:700;font-size:14px;margin-top:8px;display:block}.btn{width:100%;padding:15px;border:none;border-radius:10px;font-weight:900;font-size:18px;margin:8px 0;cursor:pointer}.green{background:#25D366;color:#fff}.black{background:#000;color:#FFC107}.yellow{background:#FFC107;color:#000}.rate{font-size:15px;line-height:1.8}</style></head><body>
+<div class="top"><h1>🚖 ANNUR CALL AUTO</h1><h2>⚡ Sabari - 8489247911</h2><p style="margin-top:8px;font-weight:700">24 HOURS SERVICE | 10 MINS ARRIVAL</p></div>
+
+<div class="box"><h3>📝 BOOKING DETAILS</h3>
+<label>Customer Name *</label><input id="cname" placeholder="Customer Per">
+<label>Customer Phone Number *</label><input id="cphone" placeholder="Customer Number - 10 digit" type="tel">
+<label>Pickup Place *</label><input id="from" placeholder="Enga irunthu? - Annur Bus Stand">
+<label>Drop Place *</label><input id="to" placeholder="Enga Poganum? - Avinashi">
+<label>🚙 Auto Number (Sabari Pandra Auto)</label><input id="autono" placeholder="Ex: TN 40 AB 1234">
+<label>👨‍✈️ Auto Driver Number</label><input id="driverno" placeholder="Driver Phone Number">
+<button class="btn green" onclick="book()">💬 WHATSAPP BOOKING SEND</button>
+<a href="tel:8489247911" class="btn black" style="display:block;text-align:center;text-decoration:none">📞 SABARI KU CALL - 8489247911</a>
+</div>
+
+<div class="box"><h3>💰 ANNUR FIXED RATE</h3><div class="rate">
+<b>0-1.5 KM:</b> Rs.80 | <b>1.5-3 KM:</b> Rs.130<br>
+<b>3-5 KM:</b> Rs.180 | <b>5-8 KM:</b> Rs.260<br>
+<b>8-12 KM:</b> Rs.350 | <b>12+:</b> Rs.22/KM<br>
+<small>Night 10PM-5AM +Rs.30 extra</small>
+</div></div>
+
+<div class="box" style="text-align:center"><h3>📊 DAILY BUSINESS</h3>
+<p>Total Bookings: <b id="count">0</b></p>
+<button class="btn yellow" onclick="downloadExcel()">📥 DOWNLOAD EXCEL SHEET</button>
+<button class="btn black" onclick="clearAll()" style="font-size:14px">Clear All Data</button>
+<div id="list" style="text-align:left;margin-top:15px"></div>
+</div>
+
+<script>
+let bookings = JSON.parse(localStorage.getItem('annur_full')||'[]');
+updateList();
+function book(){
+let cn=document.getElementById('cname').value.trim();
+let cp=document.getElementById('cphone').value.trim();
+let fp=document.getElementById('from').value.trim();
+let tp=document.getElementById('to').value.trim();
+let an=document.getElementById('autono').value.trim();
+let dn=document.getElementById('driverno').value.trim();
+if(!cn||!cp||!fp||!tp){alert('Customer Name, Phone, Pickup, Drop Fill Pannunga Anna!');return;}
+let data={date:new Date().toLocaleString(),cname:cn,cphone:cp,from:fp,to:tp,autono:an,driverno:dn};
+bookings.push(data);
+localStorage.setItem('annur_full',JSON.stringify(bookings));
+updateList();
+let msg=`*🚖 ANNUR CALL AUTO BOOKING*%0A%0A*Customer:* ${cn}%0A*Phone:* ${cp}%0A*Pickup:* ${fp}%0A*Drop:* ${tp}%0A*Auto No:* ${an||'Assign pannala'}%0A*Driver No:* ${dn||'Assign pannala'}%0A%0A*Date:* ${data.date}`;
+window.open('https://wa.me/918489247911?text='+msg,'_blank');
+document.getElementById('cname').value='';document.getElementById('cphone').value='';document.getElementById('from').value='';document.getElementById('to').value='';
+}
+function updateList(){
+document.getElementById('count').innerText=bookings.length;
+let html='';bookings.slice().reverse().forEach((b,i)=>{html+=`<div style="border:1px solid #eee;padding:10px;border-radius:8px;margin:6px 0;font-size:13px"><b>${b.cname}</b> - ${b.cphone}<br>📍 ${b.from} ➜ ${b.to}<br>🚙 ${b.autono||'-'} | 👨‍✈️ ${b.driverno||'-'}<br><small>${b.date}</small></div>`});
+document.getElementById('list').innerHTML=html;
+}
+function downloadExcel(){
+if(bookings.length==0){alert('No Bookings!');return;}
+let csv='Date,Customer Name,Phone Number,Pickup Place,Drop Place,Auto Number,Driver Number\n';
+bookings.forEach(b=>{csv+=`"${b.date}","${b.cname}","${b.cphone}","${b.from}","${b.to}","${b.autono}","${b.driverno}"\n`;});
+let blob=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Annur_Auto_Bookings_'+new Date().toLocaleDateString()+'.csv';a.click();
+}
+function clearAll(){if(confirm('All Delete Pannava?')){bookings=[];localStorage.removeItem('annur_full');updateList();}}
+</script></body></html>
